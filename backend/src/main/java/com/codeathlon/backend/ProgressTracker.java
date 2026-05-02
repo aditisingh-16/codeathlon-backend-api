@@ -5,32 +5,14 @@ import java.util.Map;
 
 public class ProgressTracker {
 
-    private Map<String, Integer> solvedCount;
-    private Map<String, Integer> totalCount;
-
-    public ProgressTracker() {
-        solvedCount = new HashMap<>();
-        totalCount = new HashMap<>();
-    }
-
-    public void addProblem(String topic) {
-        totalCount.put(topic, totalCount.getOrDefault(topic, 0) + 1);
-    }
-
-    public void markSolved(String topic) {
-        solvedCount.put(topic, solvedCount.getOrDefault(topic, 0) + 1);
-    }
-
-    public Map<String, Integer> getProgress() {
+    // ✅ Static method
+    public static Map<String, Integer> getProgress() {
         Map<String, Integer> progress = new HashMap<>();
 
-        for (String topic : totalCount.keySet()) {
-            int solved = solvedCount.getOrDefault(topic, 0);
-            int total = totalCount.get(topic);
-
-            int percent = (solved * 100) / total;
-            progress.put(topic, percent);
-        }
+        progress.put("Arrays", 100);
+        progress.put("Strings", 0);
+        progress.put("Graph", 50);
+        progress.put("Dynamic Programming", 30);
 
         return progress;
     }

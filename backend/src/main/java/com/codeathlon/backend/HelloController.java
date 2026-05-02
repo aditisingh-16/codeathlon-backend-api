@@ -1,48 +1,43 @@
 package com.codeathlon.backend;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class HelloController {
 
+    // 🔹 Test endpoint
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Welcome to CodeAthlon Backend 🚀";
+    }
+
+    // 🔹 Workout API (company-based)
     @GetMapping("/workout")
-    public List<Problem> getWorkout(@org.springframework.web.bind.annotation.RequestParam String company) {
+    public List<Problem> getWorkout(@RequestParam String company) {
         return ProblemRepository.getBalancedWorkout(company);
     }
+
+    // 🔹 Get ALL problems (Question Bank)
+    @GetMapping("/problems")
+    public List<Problem> getAllProblems() {
+        return ProblemRepository.getAllProblems();
+    }
+
+    // 🔹 Streak API
     @GetMapping("/streak")
     public UserStats getStreak() {
-
-        UserStats user = new UserStats();
-
-        // simulate yesterday activity
-        user.setLastSolvedDate(java.time.LocalDate.now().minusDays(1));
-        user.setStreak(1);
-
-        user.updateStreak(); // today
-
-        return user;
+        return UserStats.getStats();
     }
+
+    // 🔹 Progress API
     @GetMapping("/progress")
-    public java.util.Map<String, Integer> getProgress() {
-
-        ProgressTracker tracker = new ProgressTracker();
-
-        // get workout problems
-        java.util.List<Problem> problems = ProblemRepository.getBalancedWorkout("Amazon");
-
-        // add all problems
-        for (Problem p : problems) {
-            tracker.addProblem(p.getTopic());
-        }
-
-        // simulate solving only first problem
-        if (!problems.isEmpty()) {
-            tracker.markSolved(problems.get(0).getTopic());
-        }
-
-        return tracker.getProgress();
+    public Object getProgress() {
+        return ProgressTracker.getProgress();
+    }
+    @GetMapping("/interview")
+    public List<InterviewRound> getInterviewRounds(@RequestParam String company) {
+        return InterviewRoundRepository.getRoundsByCompany(company);
     }
 }
